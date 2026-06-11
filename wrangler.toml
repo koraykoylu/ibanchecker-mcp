@@ -1,0 +1,21 @@
+name = "ibanchecker-mcp"
+main = "src/index.ts"
+compatibility_date = "2025-06-01"
+compatibility_flags = ["nodejs_compat"]
+
+routes = [
+  { pattern = "mcp.ibanchecker.cash", custom_domain = true }
+]
+
+[durable_objects]
+bindings = [
+  { name = "MCP_OBJECT", class_name = "IBANCheckerMCP" }
+]
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["IBANCheckerMCP"]
+
+[vars]
+# Optional server-wide key. Clients can also pass their own key via the
+# Authorization header; see README. Set with: wrangler secret put IBANCHECKER_API_KEY

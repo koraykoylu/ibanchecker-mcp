@@ -1,0 +1,39 @@
+{
+  "name": "ibanchecker-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for ibanchecker.cash — IBAN validation, extraction, format specs and BIC/SWIFT lookup tools for AI assistants",
+  "license": "MIT",
+  "homepage": "https://ibanchecker.cash/integrations",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kamazakic/ibanchecker-mcp"
+  },
+  "bugs": {
+    "url": "https://github.com/kamazakic/ibanchecker-mcp/issues"
+  },
+  "keywords": ["mcp", "model-context-protocol", "iban", "iban-validation", "swift", "bic", "fintech"],
+  "type": "module",
+  "bin": {
+    "ibanchecker-mcp": "bin/stdio.mjs"
+  },
+  "files": ["bin", "src", "wrangler.toml", "README.md"],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node bin/stdio.mjs",
+    "typecheck": "tsc",
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "agents": "^0.0.98",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250525.0",
+    "typescript": "^5.5.4",
+    "wrangler": "^4.14.4"
+  }
+}
