@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
   "name": "io.github.koraykoylu/ibanchecker-mcp",
-  "description": "IBAN validation, extraction, format specs and BIC/SWIFT lookup tools for AI assistants, backed by ibanchecker.cash.",
+  "description": "IBAN validation, extraction, format specs and BIC/SWIFT lookup tools for AI assistants.",
   "version": "1.1.2",
   "repository": {
     "url": "https://github.com/koraykoylu/ibanchecker-mcp",
