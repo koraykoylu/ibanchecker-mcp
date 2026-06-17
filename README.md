@@ -1,6 +1,6 @@
 # ibanchecker-mcp
 
-[![npm version](https://img.shields.io/npm/v/ibanchecker-mcp.svg)](https://www.npmjs.com/package/ibanchecker-mcp)
+[![npm version](https://img.shields.io/npm/v/@ibanchecker/mcp.svg)](https://www.npmjs.com/package/@ibanchecker/mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Model Context Protocol](https://img.shields.io/badge/MCP-server-6E56CF.svg)](https://modelcontextprotocol.io)
 
@@ -52,7 +52,7 @@ Run the server locally over stdio (requires Node 18+):
   "mcpServers": {
     "ibanchecker": {
       "command": "npx",
-      "args": ["-y", "ibanchecker-mcp"],
+      "args": ["-y", "@ibanchecker/mcp"],
       "env": {
         "IBANCHECKER_API_KEY": "your-api-key-here"
       }
