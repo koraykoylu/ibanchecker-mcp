@@ -1,0 +1,18 @@
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      ibancheckerApiKey:
+        type: string
+        title: IBANChecker API Key
+        description: "Optional API key from ibanchecker.cash/api-docs (free tier: 1,000 requests/month)."
+    required: []
+  commandFunction: |-
+    (config) => ({
+      command: 'npx',
+      args: ['-y', 'ibanchecker-mcp'],
+      env: config.ibancheckerApiKey
+        ? { IBANCHECKER_API_KEY: config.ibancheckerApiKey }
+        : {}
+    })
