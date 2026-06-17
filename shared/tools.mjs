@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const API_BASE = "https://ibanchecker.cash/api/v1";
 
-export const SERVER_INFO = { name: "ibanchecker-mcp", version: "1.1.0" };
+export const SERVER_INFO = { name: "ibanchecker-mcp", version: "1.1.1" };
 
 export function makeCall(getHeaders) {
   return async function call(path, init = {}) {
