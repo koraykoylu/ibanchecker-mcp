@@ -1,6 +1,6 @@
 {
   "name": "@ibanchecker/mcp",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "mcpName": "io.github.koraykoylu/ibanchecker-mcp",
   "description": "MCP server for ibanchecker.cash: IBAN validation, extraction, format specs and BIC/SWIFT lookup tools for AI assistants",
   "license": "MIT",
