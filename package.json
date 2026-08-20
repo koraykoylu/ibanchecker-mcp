@@ -1,6 +1,6 @@
 {
   "name": "@ibanchecker/mcp",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "mcpName": "io.github.koraykoylu/ibanchecker-mcp",
   "description": "MCP server for ibanchecker.cash: IBAN validation, extraction, format specs and BIC/SWIFT lookup tools for AI assistants",
   "license": "MIT",
@@ -29,7 +29,7 @@
     "start": "node bin/stdio.mjs"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.12.1",
+    "@modelcontextprotocol/sdk": "^1.26.0",
     "zod": "^3.23.8"
   }
 }

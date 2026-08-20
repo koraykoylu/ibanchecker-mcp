@@ -1,6 +1,6 @@
 {
   "name": "ibanchecker-mcp-worker",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "private": true,
   "description": "Cloudflare Worker (remote MCP server) for ibanchecker.cash",
   "license": "MIT",
@@ -11,7 +11,7 @@
     "dev": "wrangler dev"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.12.1",
+    "@modelcontextprotocol/sdk": "^1.26.0",
     "agents": "^0.0.98",
     "zod": "^3.23.8"
   },
