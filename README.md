@@ -18,7 +18,7 @@ No IBAN data is logged or stored; validation runs in memory on Cloudflare's edge
 
 ## Quick start: hosted remote server
 
-The easiest path is the hosted endpoint. Nothing to install or deploy. The three validation tools need an API key (see [API key](#api-key)); `get_iban_format` and `lookup_bic` work without one.
+The easiest path is the hosted endpoint. Nothing to install or deploy. Every tool except `get_iban_format` needs an API key (see [API key](#api-key)).
 
 ```
 https://mcp.ibanchecker.cash/mcp
@@ -82,11 +82,21 @@ Calling `validate_iban` with `DE89370400440532013000` returns:
 }
 ```
 
-When the API returns an error (for example a `429` rate limit or `401` bad key), the tool result is flagged with `isError: true` and a human-readable message, so the assistant can react rather than crash.
+When the API returns an error (for example a `429` rate limit, a `401` missing or bad key, or a `403` tool outside the key's plan), the tool result is flagged with `isError: true` and a human-readable message, so the assistant can react rather than crash.
 
 ## API key
 
-`validate_iban`, `validate_bulk_ibans` and `extract_ibans_from_text` need an API key; `get_iban_format` and `lookup_bic` work without one. A free key covers 100 requests a month and arrives by email in seconds: get one at [ibanchecker.cash/api-docs](https://ibanchecker.cash/api-docs), and see [ibanchecker.cash/pricing](https://ibanchecker.cash/pricing) for higher volumes. Pass it as:
+Every tool except `get_iban_format` needs an API key, and what a key can call follows its plan:
+
+| Tool | Free key | Free key with a verified account | Basic / Starter | Growth / Enterprise |
+|---|---|---|---|---|
+| `validate_iban` | yes | yes | yes | yes |
+| `validate_bulk_ibans` | no | up to 10 IBANs a call | up to 100 | up to 100 |
+| `lookup_bic` | no | yes | yes | yes |
+| `extract_ibans_from_text` | no | up to 5,000 characters a call | trial with a verified account | up to 50,000 |
+| `get_iban_format` | yes | yes | yes | yes |
+
+`get_iban_format` also works without a key, up to 100 requests an hour per IP. A free key covers 100 requests a month and arrives by email in seconds: get one at [ibanchecker.cash/api-docs](https://ibanchecker.cash/api-docs). A free account on the same address, at [ibanchecker.cash/dashboard](https://ibanchecker.cash/dashboard), opens the trials. Bulk validation and extraction count one request per IBAN. See [ibanchecker.cash/pricing](https://ibanchecker.cash/pricing) for higher volumes. Pass the key as:
 
 - `IBANCHECKER_API_KEY` env var (stdio mode), or
 - `Authorization: Bearer <key>` / `x-api-key` header (remote mode).
