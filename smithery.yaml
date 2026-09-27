@@ -6,7 +6,7 @@ startCommand:
       ibancheckerApiKey:
         type: string
         title: IBANChecker API Key
-        description: "Optional API key from ibanchecker.cash/api-docs (free tier: 1,000 requests/month)."
+        description: "API key from ibanchecker.cash/api-docs, needed for the validation and extraction tools (the free key covers 100 requests a month)."
     required: []
   commandFunction: |-
     (config) => ({

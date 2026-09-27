@@ -11,14 +11,14 @@ MCP (Model Context Protocol) server for [ibanchecker.cash](https://ibanchecker.c
 | `validate_iban` | Validate a single IBAN: country, length, national BBAN structure, MOD-97 check digits, and bank details when available |
 | `validate_bulk_ibans` | Validate up to 100 IBANs in one call |
 | `extract_ibans_from_text` | Find and validate every IBAN inside a block of text (emails, invoices, spreadsheets) |
-| `get_iban_format` | IBAN format specification for any of 90 supported countries |
+| `get_iban_format` | IBAN format specification for any of 92 supported countries |
 | `lookup_bic` | Look up a bank by BIC/SWIFT code |
 
 No IBAN data is logged or stored; validation runs in memory on Cloudflare's edge. See the [security page](https://ibanchecker.cash/security) for details.
 
 ## Quick start: hosted remote server
 
-The easiest path is the hosted endpoint. Nothing to install or deploy.
+The easiest path is the hosted endpoint. Nothing to install or deploy. The three validation tools need an API key (see [API key](#api-key)); `get_iban_format` and `lookup_bic` work without one.
 
 ```
 https://mcp.ibanchecker.cash/mcp
@@ -27,7 +27,7 @@ https://mcp.ibanchecker.cash/mcp
 **Claude Code**
 
 ```bash
-claude mcp add --transport http ibanchecker https://mcp.ibanchecker.cash/mcp
+claude mcp add --transport http ibanchecker https://mcp.ibanchecker.cash/mcp --header "Authorization: Bearer YOUR_API_KEY"
 ```
 
 **Claude Desktop** (`claude_desktop_config.json`), via the [`mcp-remote`](https://www.npmjs.com/package/mcp-remote) bridge:
@@ -37,7 +37,10 @@ claude mcp add --transport http ibanchecker https://mcp.ibanchecker.cash/mcp
   "mcpServers": {
     "ibanchecker": {
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.ibanchecker.cash/mcp"]
+      "args": ["-y", "mcp-remote", "https://mcp.ibanchecker.cash/mcp", "--header", "Authorization:${AUTH_HEADER}"],
+      "env": {
+        "AUTH_HEADER": "Bearer your-api-key-here"
+      }
     }
   }
 }
@@ -83,7 +86,7 @@ When the API returns an error (for example a `429` rate limit or `401` bad key),
 
 ## API key
 
-The underlying REST API has a free tier (1,000 requests/month). Get a key at [ibanchecker.cash/api-docs](https://ibanchecker.cash/api-docs) and pass it as:
+`validate_iban`, `validate_bulk_ibans` and `extract_ibans_from_text` need an API key; `get_iban_format` and `lookup_bic` work without one. A free key covers 100 requests a month and arrives by email in seconds: get one at [ibanchecker.cash/api-docs](https://ibanchecker.cash/api-docs), and see [ibanchecker.cash/pricing](https://ibanchecker.cash/pricing) for higher volumes. Pass it as:
 
 - `IBANCHECKER_API_KEY` env var (stdio mode), or
 - `Authorization: Bearer <key>` / `x-api-key` header (remote mode).

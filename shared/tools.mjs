@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const API_BASE = "https://ibanchecker.cash/api/v1";
 
-export const SERVER_INFO = { name: "ibanchecker-mcp", version: "1.2.1" };
+export const SERVER_INFO = { name: "ibanchecker-mcp", version: "1.3.0" };
 
 export function makeCall(getHeaders) {
   return async function call(path, init = {}) {
@@ -27,9 +27,9 @@ export function makeCall(getHeaders) {
     if (!res.ok) {
       const hint =
         res.status === 401 || res.status === 403
-          ? " (check your IBANCHECKER_API_KEY)"
+          ? " (validation and extraction need an API key: IBANCHECKER_API_KEY when running locally, an Authorization: Bearer header on the hosted server; a free key covers 100 requests a month)"
           : res.status === 429
-            ? " (rate limit reached; the free tier allows 1,000 requests/month)"
+            ? " (limit reached: a free key covers 100 requests a month, requests without a key 100 an hour)"
             : "";
       const detail = typeof data === "string" ? data : JSON.stringify(data, null, 2);
       return {
@@ -63,7 +63,7 @@ export function registerTools(server, call) {
         "Returns JSON with fields such as `valid` (boolean), `countryCode`, `checkDigitsValid`, the `formatted` IBAN, and an optional `bank` object. " +
         "On a malformed input the call still succeeds with `valid: false` and a `reason` (e.g. INVALID_FORMAT, INVALID_CHECKSUM); it does not throw for invalid IBANs.\n\n" +
         "Use this when you have one account number to verify. For many IBANs prefer `validate_bulk_ibans`; to pull IBANs out of prose use `extract_ibans_from_text` first. " +
-        "No account data is stored; validation runs in memory and is discarded.",
+        "No account data is stored; validation runs in memory and is discarded. Requires an API key; a free key from ibanchecker.cash/api-docs covers 100 requests a month.",
       inputSchema: {
         iban: z
           .string()
@@ -85,7 +85,7 @@ export function registerTools(server, call) {
         "Validate a batch of up to 100 IBANs in one call, applying the same ISO 13616 checks as `validate_iban` (country, length, BBAN structure, MOD-97).\n\n" +
         "Returns a JSON array of per-IBAN results in the same order as the input, each with `valid`, `countryCode`, an optional `reason` for failures, and bank details when the code is recognized, plus a summary count of valid vs. invalid entries.\n\n" +
         "Use this instead of calling `validate_iban` in a loop when checking a list (e.g. a payment file or a column of supplier accounts). Split inputs larger than 100 into multiple calls. " +
-        "Account numbers are validated in memory and never stored.",
+        "Account numbers are validated in memory and never stored. Requires an API key; a free key from ibanchecker.cash/api-docs covers 100 requests a month.",
       inputSchema: {
         ibans: z
           .array(z.string().min(5))
@@ -108,7 +108,7 @@ export function registerTools(server, call) {
         "Scan a free-form block of text and pull out every candidate IBAN, then validate each one.\n\n" +
         "Useful for unstructured sources such as emails, invoices, PDFs pasted as text, or chat messages where IBANs appear inline and may be split by spaces or surrounded by other words. " +
         "Returns a JSON array of the IBANs found, each with its validation result (`valid`, `countryCode`, bank details when known); text containing no IBAN returns an empty list rather than an error.\n\n" +
-        "Use this as the first step when the account number is buried in prose; pass the extracted IBANs to `validate_bulk_ibans` only if you need to re-check them separately. Input text is processed in memory and not stored.",
+        "Use this as the first step when the account number is buried in prose; pass the extracted IBANs to `validate_bulk_ibans` only if you need to re-check them separately. Input text is processed in memory and not stored. Requires an API key; a free key from ibanchecker.cash/api-docs covers 100 requests a month.",
       inputSchema: {
         text: z
           .string()
@@ -130,7 +130,7 @@ export function registerTools(server, call) {
         "Return the IBAN format specification for a country, covering 90 supported IBAN-using countries.\n\n" +
         "Returns JSON describing the country's total IBAN length, the BBAN layout (bank code, branch code, and account number positions and lengths), an example IBAN, and the SEPA-membership flag. " +
         "Use this to understand or display how a country's IBAN is structured, to build input masks, or to explain a validation failure, not to validate a specific number (use `validate_iban` for that). " +
-        "An unsupported or unknown country code returns an error result describing the problem.",
+        "An unsupported or unknown country code returns an error result describing the problem. Works without an API key.",
       inputSchema: {
         country_code: z
           .string()
@@ -153,7 +153,7 @@ export function registerTools(server, call) {
         "Look up a financial institution by its BIC (Business Identifier Code, also called SWIFT code) and return the matching bank's details.\n\n" +
         "Accepts an 8-character (head office) or 11-character (branch) BIC. Returns JSON with the bank name, city, ISO country code, SEPA membership, and (when available) the official website and Wikidata entity. " +
         "Use this to resolve a BIC to a human-readable bank, to confirm a SWIFT code is real, or to enrich a validated IBAN with institution details. " +
-        "An unknown or malformed BIC returns an error result rather than a guess; codes are never fabricated.",
+        "An unknown or malformed BIC returns an error result rather than a guess; codes are never fabricated. Works without an API key.",
       inputSchema: {
         bic: z
           .string()
