@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const API_BASE = "https://ibanchecker.cash/api/v1";
 
-export const SERVER_INFO = { name: "ibanchecker-mcp", version: "1.4.0" };
+export const SERVER_INFO = { name: "ibanchecker-mcp", version: "1.4.1" };
 
 export function makeCall(getHeaders) {
   return async function call(path, init = {}) {
@@ -62,7 +62,8 @@ export function registerTools(server, call) {
         "Validate a single International Bank Account Number (IBAN) against the official ISO 13616 structure for its country.\n\n" +
         "What it checks: the country code, total length for that country, the national BBAN structure, and the MOD-97 check digits. " +
         "When the bank/branch code maps to a known institution, the response also includes the bank name, BIC/SWIFT code, and country.\n\n" +
-        "Returns JSON with `valid` (boolean), `iban`, `formatted`, `country`, `country_name`, `check_digits`, `bban`, and, when the bank is recognized, `bank_name`, `bic`, `bank_code`, `bank_city`, `sepa` and `national_check_valid`. " +
+        "Returns JSON with `valid` (boolean), `iban`, `formatted`, `country`, `country_name`, `check_digits`, `bban`, and, when the bank is recognized, `bank_name`, `bic`, `bank_code`, `bank_city`, `bank_logo`, `sepa` and `national_check_valid`. " +
+        "`bank_logo` is the bank's logo as the ibanchecker.cash result card shows it: `on_light` and `on_dark` file URLs, `dark_needs_light_backing` (true when the dark file should sit on a light chip) and `format` (svg, png or webp); it is null when no verified logo is held for the bank. Logos are the banks' trademarks, provided to identify the bank. " +
         "An invalid IBAN still returns a result, with `valid: false`, an `error` message and an `error_code` (e.g. INVALID_CHECKSUM, INVALID_LENGTH, UNKNOWN_COUNTRY); it does not throw.\n\n" +
         "Use this when you have one account number to verify. For many IBANs prefer `validate_bulk_ibans`; to pull IBANs out of prose use `extract_ibans_from_text` first. " +
         "No account data is stored; validation runs in memory and is discarded. Requires an API key; a free key from ibanchecker.cash/api-docs covers 100 requests a month.",
@@ -154,7 +155,7 @@ export function registerTools(server, call) {
       title: "Look Up Bank by BIC/SWIFT",
       description:
         "Look up a financial institution by its BIC (Business Identifier Code, also called SWIFT code) and return the matching bank's details.\n\n" +
-        "Accepts an 8-character (head office) or 11-character (branch) BIC. Returns JSON with `bic`, `bic8`, `bank_name`, `city`, `country_code`, `country_name`, `sepa`, the institution `type` and its `status`. " +
+        "Accepts an 8-character (head office) or 11-character (branch) BIC. Returns JSON with `bic`, `bic8`, `bank_name`, `bank_logo` (same shape as in `validate_iban`, null when no verified logo is held), `city`, `country_code`, `country_name`, `sepa`, the institution `type` and its `status`. " +
         "Use this to resolve a BIC to a human-readable bank, to confirm a SWIFT code is real, or to enrich a validated IBAN with institution details. " +
         "An unknown or malformed BIC returns an error result rather than a guess; codes are never fabricated. " +
         "Requires an API key on the Basic plan or above, or a free key whose address has a verified ibanchecker.cash account.",
